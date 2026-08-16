@@ -1,0 +1,81 @@
+// ========================================= PORT_config.h =========================================
+// Auther: Eng. Ahmed Ashraf
+// SWC: PORT
+// Layer: MCAL
+// Description: This file contains the configuration information of PORT peripheral
+// =================================================================================================
+
+#ifndef PORT_CONFIG_H
+#define PORT_CONFIG_H
+
+/* Pin directions */
+#define DIO_INPUT 0
+#define DIO_OUTPUT 1
+
+/* PORTB Pin Directions */
+#define PORTB_PIN0_DIR DIO_OUTPUT
+#define PORTB_PIN1_DIR DIO_OUTPUT
+#define PORTB_PIN2_DIR DIO_OUTPUT
+#define PORTB_PIN3_DIR DIO_OUTPUT
+#define PORTB_PIN4_DIR DIO_OUTPUT
+#define PORTB_PIN5_DIR DIO_OUTPUT
+#define PORTB_PIN6_DIR DIO_OUTPUT
+#define PORTB_PIN7_DIR DIO_OUTPUT
+
+/* PORTC Pin Directions */
+#define PORTC_PIN0_DIR DIO_OUTPUT
+#define PORTC_PIN1_DIR DIO_OUTPUT
+#define PORTC_PIN2_DIR DIO_OUTPUT
+#define PORTC_PIN3_DIR DIO_OUTPUT
+#define PORTC_PIN4_DIR DIO_OUTPUT
+#define PORTC_PIN5_DIR DIO_OUTPUT
+#define PORTC_PIN6_DIR DIO_OUTPUT
+#define PORTC_PIN7_DIR DIO_OUTPUT
+
+/* PORTD Pin Directions */
+#define PORTD_PIN0_DIR DIO_OUTPUT
+#define PORTD_PIN1_DIR DIO_OUTPUT
+#define PORTD_PIN2_DIR DIO_OUTPUT
+#define PORTD_PIN3_DIR DIO_OUTPUT
+#define PORTD_PIN4_DIR DIO_OUTPUT
+#define PORTD_PIN5_DIR DIO_OUTPUT
+#define PORTD_PIN6_DIR DIO_OUTPUT
+#define PORTD_PIN7_DIR DIO_OUTPUT
+
+/* PORTs Initial Values */
+#define INPUT_FLOATING 0
+#define INPUT_PULLUP 1
+#define OUTPUT_LOW 0
+#define OUTPUT_HIGH 1
+
+/* PORTB Initial Values */
+#define PORTB_PIN0_INIT_VAL OUTPUT_LOW
+#define PORTB_PIN1_INIT_VAL OUTPUT_LOW
+#define PORTB_PIN2_INIT_VAL OUTPUT_LOW
+#define PORTB_PIN3_INIT_VAL OUTPUT_LOW
+#define PORTB_PIN4_INIT_VAL OUTPUT_LOW
+#define PORTB_PIN5_INIT_VAL OUTPUT_LOW
+#define PORTB_PIN6_INIT_VAL OUTPUT_LOW
+#define PORTB_PIN7_INIT_VAL OUTPUT_LOW
+
+/* PORTC Initial Values */
+#define PORTC_PIN0_INIT_VAL OUTPUT_LOW
+#define PORTC_PIN1_INIT_VAL OUTPUT_LOW
+#define PORTC_PIN2_INIT_VAL OUTPUT_LOW
+#define PORTC_PIN3_INIT_VAL OUTPUT_LOW
+#define PORTC_PIN4_INIT_VAL OUTPUT_LOW
+#define PORTC_PIN5_INIT_VAL OUTPUT_LOW
+#define PORTC_PIN6_INIT_VAL OUTPUT_LOW
+#define PORTC_PIN7_INIT_VAL OUTPUT_LOW
+
+/* PORTD Initial Values */
+#define PORTD_PIN0_INIT_VAL OUTPUT_LOW
+#define PORTD_PIN1_INIT_VAL OUTPUT_LOW
+#define PORTD_PIN2_INIT_VAL OUTPUT_LOW
+#define PORTD_PIN3_INIT_VAL OUTPUT_LOW
+#define PORTD_PIN4_INIT_VAL OUTPUT_LOW
+#define PORTD_PIN5_INIT_VAL OUTPUT_LOW
+#define PORTD_PIN6_INIT_VAL OUTPUT_LOW
+#define PORTD_PIN7_INIT_VAL OUTPUT_LOW
+
+#endif /* PORT_CONFIG_H */
