@@ -1,8 +1,3 @@
-# 2. `avr-mcal-drivers/README.md`
-
-This one should be the **strongest driver README**, because this is where most of your low-level work lives.
-
-```markdown
 # AVR MCAL Drivers
 
 Register-level peripheral drivers for AVR 8-bit microcontrollers.
@@ -129,6 +124,4 @@ These MCAL drivers form the foundation for the higher-level HAL drivers in [`avr
 
 They also provide the hardware-level foundation for my current project, **ARTOS**, a from-scratch RTOS for AVR.
 
-````
 
----
