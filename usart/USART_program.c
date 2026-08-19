@@ -21,19 +21,19 @@ static void (*local_pfNotificationTransmitCallback)(void) = NULL;
 static u16 *local_u16DataReceive = 0;
 static void (*local_pfNotificationReceiveCallback)(void) = NULL;
 
-static u16 calcBaudRateReg(u32 Copy_u32BaudRate)
+static u16 calcBaudRateReg(u64 Copy_u64BaudRate)
 {
     u16 Local_u16NewUBRR0 = 0;
     switch (local_enuMode)
     {
     case USART_ASYNC_NORMAL_SPEED:
-        Local_u16NewUBRR0 = (SYSTEM_CLK_FREQUENCY / (16 * Copy_u32BaudRate)) - 1;
+        Local_u16NewUBRR0 = (SYSTEM_CLK_FREQUENCY / (16 * Copy_u64BaudRate)) - 1;
         break;
     case USART_ASYNC_X2_SPEED:
-        Local_u16NewUBRR0 = (SYSTEM_CLK_FREQUENCY / (8 * Copy_u32BaudRate)) - 1;
+        Local_u16NewUBRR0 = (SYSTEM_CLK_FREQUENCY / (8 * Copy_u64BaudRate)) - 1;
         break;
     case USART_SYNC_MASTER:
-        Local_u16NewUBRR0 = (SYSTEM_CLK_FREQUENCY / (2 * Copy_u32BaudRate)) - 1;
+        Local_u16NewUBRR0 = (SYSTEM_CLK_FREQUENCY / (2 * Copy_u64BaudRate)) - 1;
         break;
     }
     return Local_u16NewUBRR0;

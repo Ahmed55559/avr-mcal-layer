@@ -62,6 +62,6 @@
 #define UCPOL0 0 // Clock Polarity
 
 /* Helper Functions */
-static u16 calcBaudRateReg(u32 Copy_u32BaudRate);
+static u16 calcBaudRateReg(u64 Copy_u64BaudRate);
 static void applyUSARTMode(USART_Mode Copy_enuMode);
 #endif /* USART_PRIVATE_H */
