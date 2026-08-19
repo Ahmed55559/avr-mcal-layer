@@ -23,8 +23,7 @@ static void (*local_pfNotificationReceiveCallback)(void) = NULL;
 
 static u16 calcBaudRateReg(u64 Copy_u64BaudRate)
 {
-    c
-        u16 Local_u16NewUBRR0 = 0;
+    u16 Local_u16NewUBRR0 = 0;
     switch (local_enuMode)
     {
     case USART_ASYNC_NORMAL_SPEED:
@@ -42,7 +41,7 @@ static u16 calcBaudRateReg(u64 Copy_u64BaudRate)
 
 static void applyUSARTMode(USART_Mode Copy_enuMode)
 {
-    switch (local_enuMode)
+    switch (Copy_enuMode)
     {
     case USART_ASYNC_NORMAL_SPEED:
         UCSR0C &= 0x3F;
@@ -86,7 +85,7 @@ void USART_voidInit(void)
 
 void USART_enuSetBaudRate(u32 Copy_u32BaudRate)
 {
-    u16 local_u16BuadRate = calcBaudRateReg(INITIAL_USART_BAUDRATE);
+    u16 local_u16BuadRate = calcBaudRateReg(Copy_u32BaudRate);
     UBRR0L = (local_u16BuadRate & 0x00FF);
     UBRR0H = (local_u16BuadRate & 0x0F00) >> 8;
 }
@@ -153,7 +152,7 @@ USART_ErrorStatus USART_enuReceiveBlocking(u16 *Copy_pu16Data)
     while (!(UCSR0A & (1 << RXC0)))
         ;
 
-    if (local_enuDataBitsMode = USART_DATA_BITS_9)
+    if (local_enuDataBitsMode == USART_DATA_BITS_9)
     {
         *Copy_pu16Data = UDR0 | (GET_BIT(UCSR0B, RXB80) << 8);
     }
