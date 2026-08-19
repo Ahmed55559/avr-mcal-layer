@@ -208,13 +208,16 @@ USART_ErrorStatus USART_enuTransmitNonBlocking(u8 Copy_u8Data, void (*Copy_pfNot
 {
     if (!GET_BIT(SREG, GIE))
         return USART_GIE_DISABLED;
-    if (!GET_BIT(UCSR0B, TXCIE0))
-        return USART_TXIE_DISABLED;
+
     if (!GET_BIT(UCSR0B, TXEN0))
         return USART_TX_DISABLED;
 
     local_u8DataTransmit = Copy_u8Data;
-    local_pfNotificationTransmitCallback = Copy_pfNotificationCallback;
+    local_pfNotificationTransmitCallback =
+        Copy_pfNotificationCallback;
+
+    SET_BIT(UCSR0B, UDRIE0);
+
     return USART_OK;
 }
 
