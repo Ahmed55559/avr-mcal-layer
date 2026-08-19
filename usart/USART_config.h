@@ -7,11 +7,9 @@
 
 #ifndef USART_CONFIG_H
 #define USART_CONFIG_H
-typedef enum
-{
-    DISABLE,
-    ENABLE
-};
+
+#define DISABLE 0
+#define ENABLE 1
 
 #define SYSTEM_CLK_FREQUENCY 16000000
 
