@@ -120,13 +120,16 @@ USART_ErrorStatus USART_enuSetStopBits(USART_StopBitsMode Copy_enuMode)
 }
 USART_ErrorStatus USART_enuSetDataBits(USART_DataBitsMode Copy_enuMode)
 {
-    if (Copy_enuMode > USART_DATA_BITS_9 && Copy_enuMode < USART_DATA_BITS_5)
+    if (Copy_enuMode > USART_DATA_BITS_9 ||
+        Copy_enuMode < USART_DATA_BITS_5)
         return USART_OUT_OF_RANGE;
 
     local_enuDataBitsMode = Copy_enuMode;
     UCSR0C = (UCSR0C & 0xF9) | (Copy_enuMode << 1);
-    if (local_enuDataBitsMode == USART_DATA_BITS_9)
+    if (Copy_enuMode == USART_DATA_BITS_9)
         SET_BIT(UCSR0B, UCSZ02);
+    else
+        CLR_BIT(UCSR0B, UCSZ02);
 
     return USART_OK;
 }
