@@ -246,10 +246,10 @@ USART_ErrorStatus USART_enuSetCallback(USART_Interrupt Copy_enuInterrupt, void (
     return USART_OK;
 }
 
-void __vector_19(void) __attribute__((signal));
-void __vector_19(void)
+void __vector_18(void) __attribute__((signal));
+void __vector_18(void)
 {
-    if (local_enuDataBitsMode = USART_DATA_BITS_9)
+    if (local_enuDataBitsMode == USART_DATA_BITS_9)
     {
         *local_u16DataReceive = UDR0 | (GET_BIT(UCSR0B, RXB80) << 8);
     }
@@ -263,22 +263,25 @@ void __vector_19(void)
         USART_Callback[0]();
 }
 
+void __vector_19(void) __attribute__((signal));
+void __vector_19(void)
+{
+    UDR0 = local_u8DataTransmit;
+
+    CLR_BIT(UCSR0B, UDRIE0);
+
+    if (local_pfNotificationTransmitCallback != NULL)
+        local_pfNotificationTransmitCallback();
+
+    if (USART_Callback[DATA_REG_EMPTY] != NULL)
+        USART_Callback[DATA_REG_EMPTY]();
+}
+
 void __vector_20(void) __attribute__((signal));
 void __vector_20(void)
 {
-
-    if (USART_Callback[1] != NULL)
-        USART_Callback[1]();
-}
-
-void __vector_21(void) __attribute__((signal));
-void __vector_21(void)
-{
-    UDR0 = local_u8DataTransmit;
-    if (local_pfNotificationTransmitCallback != NULL)
-        local_pfNotificationTransmitCallback();
-    if (USART_Callback[2] != NULL)
-        USART_Callback[2]();
+    if (USART_Callback[TX_COMPLETE_INT] != NULL)
+        USART_Callback[TX_COMPLETE_INT]();
 }
 
 USART_ErrorStatus USART_enuEnableMultiProcessorMode(void)
