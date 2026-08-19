@@ -138,7 +138,7 @@ USART_ErrorStatus USART_enuTransmitBlocking(u8 Copy_u8Data)
     if (!GET_BIT(UCSR0B, TXEN0))
         return USART_TX_DISABLED;
 
-    while (!(UCSR0A & (1 << TXC0)))
+    while (!(UCSR0A & (1 << UDRE0)))
         ;
 
     UDR0 = Copy_u8Data;
