@@ -1,8 +1,8 @@
-// ========================================= WDT_program.c =========================================
+// ========================================= USART_program.c =========================================
 // Auther: Eng. Ahmed Ashraf
-// SWC: WDT
+// SWC: USART
 // Layer: MCAL
-// Description: This file contains the implementation of WDT functions
+// Description: This file contains the implementation of USART functions
 // =================================================================================================
 
 #include "STD_TYPES.h"
@@ -23,7 +23,8 @@ static void (*local_pfNotificationReceiveCallback)(void) = NULL;
 
 static u16 calcBaudRateReg(u64 Copy_u64BaudRate)
 {
-    u16 Local_u16NewUBRR0 = 0;
+    c
+        u16 Local_u16NewUBRR0 = 0;
     switch (local_enuMode)
     {
     case USART_ASYNC_NORMAL_SPEED:
@@ -74,7 +75,11 @@ void USART_voidInit(void)
     UCSR0B = (UCSR0B & 0xE7) | (INITIAL_USART_RX_ENABLE << RXEN0) | (INITIAL_USART_TX_ENABLE << TXEN0);
 
     // Frame Format
-    UCSR0C = (UCSR0C & 0xC0) | (INITIAL_USART_DATA_BITS << 1) | (UPM00 << INITIAL_USART_PARITY_MODE) | (USBS0 << INITIAL_USART_STOP_BITS) | (UCPOL0 << INITIAL_USART_CLK_POL);
+    UCSR0C = (UCSR0C & 0xC0) |
+             (INITIAL_USART_DATA_BITS << UCSZ00) |
+             (INITIAL_USART_PARITY_MODE << UPM00) |
+             (INITIAL_USART_STOP_BITS << USBS0) |
+             (INITIAL_USART_CLK_POL << UCPOL0);
     if (local_enuDataBitsMode == USART_DATA_BITS_9)
         SET_BIT(UCSR0B, UCSZ02);
 }
