@@ -105,7 +105,7 @@ USART_ErrorStatus USART_enuSetParity(USART_ParityMode Copy_enuMode)
     if (Copy_enuMode > USART_PARITY_ODD || Copy_enuMode < USART_PARITY_DISABLED)
         return USART_INVALID_PARITY_MODE;
 
-    UCSR0C = (UCSR0C & 0xCF) | (UPM00 << Copy_enuMode);
+    UCSR0C = (UCSR0C & 0xCF) | ((u8)Copy_enuMode << UPM00);
     return USART_OK;
 }
 
@@ -114,7 +114,9 @@ USART_ErrorStatus USART_enuSetStopBits(USART_StopBitsMode Copy_enuMode)
     if (Copy_enuMode != USART_STOP_BITS_1 && Copy_enuMode != USART_STOP_BITS_2)
         return USART_INVALID_STOP_BITS;
 
-    UCSR0C = (UCSR0C & 0xF7) | (USBS0 << Copy_enuMode);
+    UCSR0C &= ~(1 << USBS0);
+    if (Copy_enuMode == USART_STOP_BITS_2)
+        SET_BIT(UCSR0C, USBS0);
     return USART_OK;
 }
 USART_ErrorStatus USART_enuSetDataBits(USART_DataBitsMode Copy_enuMode)
@@ -146,6 +148,9 @@ USART_ErrorStatus USART_enuTransmitBlocking(u8 Copy_u8Data)
 }
 USART_ErrorStatus USART_enuReceiveBlocking(u16 *Copy_pu16Data)
 {
+    if (Copy_pu16Data == NULL)
+        return USART_NULL_POINTER;
+
     if (!GET_BIT(UCSR0B, RXEN0))
         return USART_RX_DISABLED;
 
@@ -166,6 +171,9 @@ USART_ErrorStatus USART_enuReceiveBlocking(u16 *Copy_pu16Data)
 
 USART_ErrorStatus USART_enuEnableInterrupt(USART_Interrupt Copy_enuInterrupt)
 {
+    if (Copy_enuInterrupt > TX_COMPLETE_INT)
+        return USART_INVALID_INTERRUPT;
+
     if (!GET_BIT(SREG, GIE))
         return USART_GIE_DISABLED;
 
@@ -187,6 +195,9 @@ USART_ErrorStatus USART_enuEnableInterrupt(USART_Interrupt Copy_enuInterrupt)
 }
 USART_ErrorStatus USART_enuDisableInterrupt(USART_Interrupt Copy_enuInterrupt)
 {
+    if (Copy_enuInterrupt > TX_COMPLETE_INT)
+        return USART_INVALID_INTERRUPT;
+
     switch (Copy_enuInterrupt)
     {
     case RX_COMPLETE_INT:
@@ -222,10 +233,10 @@ USART_ErrorStatus USART_enuTransmitNonBlocking(u8 Copy_u8Data, void (*Copy_pfNot
 
 USART_ErrorStatus USART_enuReceiveNonBlocking(u16 *Copy_pu16Data, void (*Copy_pfNotificationCallback)(void))
 {
+    if (Copy_pu16Data == NULL)
+        return USART_NULL_POINTER;
     if (!GET_BIT(SREG, GIE))
         return USART_GIE_DISABLED;
-    if (!GET_BIT(UCSR0B, RXCIE0))
-        return USART_RXIE_DISABLED;
     if (!GET_BIT(UCSR0B, RXEN0))
         return USART_RX_DISABLED;
 
@@ -239,6 +250,8 @@ USART_ErrorStatus USART_enuSetCallback(USART_Interrupt Copy_enuInterrupt, void (
 {
     if (Copy_pfCallback == NULL)
         return USART_NULL_POINTER;
+    if (Copy_enuInterrupt > TX_COMPLETE_INT)
+        return USART_INVALID_INTERRUPT;
 
     USART_Callback[Copy_enuInterrupt] = Copy_pfCallback;
 
@@ -248,6 +261,9 @@ USART_ErrorStatus USART_enuSetCallback(USART_Interrupt Copy_enuInterrupt, void (
 void __vector_18(void) __attribute__((signal));
 void __vector_18(void)
 {
+    if (local_u16DataReceive == NULL)
+        return;
+
     if (local_enuDataBitsMode == USART_DATA_BITS_9)
     {
         *local_u16DataReceive = UDR0 | (GET_BIT(UCSR0B, RXB80) << 8);
@@ -314,6 +330,8 @@ USART_ErrorStatus USART_enuTransmitAddress(u8 Copy_u8Address)
     UCSR0C = (UCSR0C & 0xF9) | (local_enuDataBitsMode << 1);
     if (local_enuDataBitsMode == USART_DATA_BITS_9)
         SET_BIT(UCSR0B, UCSZ02);
+    else
+        CLR_BIT(UCSR0B, UCSZ02);
 
     return USART_OK;
 }
