@@ -54,8 +54,10 @@ ADC_ErrorStatus ADC_enuReadSync(ADC_channel channel, u16 *result)
     if (result == NULL)
         return NULL_POINTER;
 
-    if (GET_BIT(ADCSRA, ADSC))
+    if (ADC_CurrentState == ADC_BUSY_STATE)
         return ADC_BUSY;
+
+    ADC_CurrentState = ADC_BUSY_STATE;
 
     // change the channel
     ADMUX = (ADMUX & ~0x0F) | channel;
@@ -79,6 +81,7 @@ ADC_ErrorStatus ADC_enuReadSync(ADC_channel channel, u16 *result)
         /* Right adjustment handling */
         *result = (high << 8) | low;
     }
+    ADC_CurrentState = ADC_IDLE_STATE;
     return ADC_OK;
 }
 
