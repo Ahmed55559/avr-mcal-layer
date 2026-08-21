@@ -114,12 +114,13 @@ void __vector_22(void)
     if (GET_BIT(ADMUX, ADLAR))
     {
         /* Left adjustent handling */
-        *Global_u16AsyncResult = high;
+        *Global_u16AsyncResult = ((u16)high << 2) | (low >> 6);
+        ;
     }
     else
     {
         /* Right adjustment handling */
-        *Global_u16AsyncResult = (high << 8) | low;
+        *Global_u16AsyncResult = ((u16)high << 8) | low;
     }
 
     if (Global_AsyncNotificationFunc != NULL)
