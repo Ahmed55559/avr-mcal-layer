@@ -130,6 +130,7 @@ void __vector_22(void)
     if (Global_AsyncNotificationFunc != NULL)
         Global_AsyncNotificationFunc();
 
+    CLR_BIT(ADCSRA, ADIE);
     ADC_CurrentState = ADC_IDLE_STATE;
 }
 
