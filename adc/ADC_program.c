@@ -95,12 +95,12 @@ ADC_ErrorStatus ADC_enuReadAsync(ADC_channel channel, u16 *result, void (*notifi
     if (!GET_BIT(SREG, 7))
         return GLOBAL_INTERRUPT_DISABLED;
 
-    // Enable ADC interrupt
-    SET_BIT(ADCSRA, ADIE);
-
     // setting the global values to be used by ADC ISR
     Global_u16AsyncResult = result;
     Global_AsyncNotificationFunc = notification_func;
+
+    // Enable ADC interrupt
+    SET_BIT(ADCSRA, ADIE);
 
     // change the channel
     ADMUX = (ADMUX & ~0x0F) | channel;
@@ -110,8 +110,8 @@ ADC_ErrorStatus ADC_enuReadAsync(ADC_channel channel, u16 *result, void (*notifi
 
     return ADC_OK;
 }
-void __vector_22(void) __attribute__((signal));
-void __vector_22(void)
+void __vector_21(void) __attribute__((signal));
+void __vector_21(void)
 {
     u8 low = ADCL;
     u8 high = ADCH;
@@ -119,7 +119,6 @@ void __vector_22(void)
     {
         /* Left adjustent handling */
         *Global_u16AsyncResult = ((u16)high << 2) | (low >> 6);
-        ;
     }
     else
     {
