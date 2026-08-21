@@ -46,6 +46,8 @@ ADC_ErrorStatus ADC_enuReadSync(ADC_channel channel, u16 *result)
 {
     if (channel > INTERNAL_TEMPRATURE_SENSOR || channel < ADC0)
         return INVALID_CHANNEL;
+    if (result == NULL)
+        return NULL_POINTER;
 
     if (GET_BIT(ADCSRA, ADSC))
         return ADC_BUSY;
@@ -81,7 +83,8 @@ ADC_ErrorStatus ADC_enuReadAsync(ADC_channel channel, u16 *result, void (*notifi
 {
     if (channel > INTERNAL_TEMPRATURE_SENSOR || channel < ADC0)
         return INVALID_CHANNEL;
-
+    if (result == NULL)
+        return NULL_POINTER;
     if (GET_BIT(ADCSRA, ADSC))
         return ADC_BUSY;
 
