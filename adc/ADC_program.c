@@ -11,6 +11,8 @@
 #include "ADC_config.h"
 #include "ADC_private.h"
 
+static ADC_State ADC_CurrentState = ADC_IDLE_STATE;
+
 void ADC_voidInit()
 {
     /* Prescaler */
@@ -85,8 +87,10 @@ ADC_ErrorStatus ADC_enuReadAsync(ADC_channel channel, u16 *result, void (*notifi
         return INVALID_CHANNEL;
     if (result == NULL)
         return NULL_POINTER;
-    if (GET_BIT(ADCSRA, ADSC))
+    if (ADC_CurrentState == ADC_BUSY_STATE)
         return ADC_BUSY;
+
+    ADC_CurrentState = ADC_BUSY_STATE;
 
     if (!GET_BIT(SREG, 7))
         return GLOBAL_INTERRUPT_DISABLED;
@@ -125,6 +129,8 @@ void __vector_22(void)
 
     if (Global_AsyncNotificationFunc != NULL)
         Global_AsyncNotificationFunc();
+
+    ADC_CurrentState = ADC_IDLE_STATE;
 }
 
 ADC_ErrorStatus ADC_enuChangeVoltageRef(ADC_VoltageRef newRef)

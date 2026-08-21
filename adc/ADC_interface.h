@@ -60,6 +60,12 @@ typedef enum
     LEFT_ADJ
 } ADC_ReadAdjustment;
 
+typedef enum
+{
+    ADC_IDLE_STATE,
+    ADC_BUSY_STATE
+} ADC_State;
+
 void ADC_voidInit(void);
 void ADC_voidEnable(void);
 void ADC_voidDisable(void);
