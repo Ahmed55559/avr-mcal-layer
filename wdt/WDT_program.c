@@ -119,8 +119,8 @@ WDT_ErrorStatus WDT_enuSetCallback(void (*Copy_pfCallback)(void))
 
     return WDT_OK;
 }
-void __vector_7(void) __attribute__((signal));
-void __vector_7(void)
+void __vector_6(void) __attribute__((signal));
+void __vector_6(void)
 {
     if (WDT_Callback != NULL)
     {
