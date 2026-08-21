@@ -133,11 +133,11 @@ void __vector_21(void)
         *Global_u16AsyncResult = ((u16)high << 8) | low;
     }
 
-    if (Global_AsyncNotificationFunc != NULL)
-        Global_AsyncNotificationFunc();
-
     CLR_BIT(ADCSRA, ADIE);
     ADC_CurrentState = ADC_IDLE_STATE;
+
+    if (Global_AsyncNotificationFunc != NULL)
+        Global_AsyncNotificationFunc();
 }
 
 ADC_ErrorStatus ADC_enuChangeVoltageRef(ADC_VoltageRef newRef)
