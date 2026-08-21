@@ -131,28 +131,54 @@ TIMER0_ErrorStatus TIMER0_enuSetOCOutputMode(TIMER0_OCMode Copy_enuMode,
     return TIMER0_OK;
 }
 
-TIMER0_ErrorStatus TIMER0_enuSetPWMOutputMode(TIMER0_PWMMode Copy_enuMode,
-                                              TIMER0_OutputPin Copy_enuPin)
+TIMER0_ErrorStatus TIMER0_enuSetPWMOutputMode(
+    TIMER0_PWMMode Copy_enuMode,
+    TIMER0_OutputPin Copy_enuPin)
 {
-
-    if (Copy_enuMode != PWM_INVERTING && Copy_enuMode != PWM_NON_INVERTING)
+    if (Copy_enuMode != PWM_INVERTING &&
+        Copy_enuMode != PWM_NON_INVERTING)
+    {
         return INVALID_OUTPUT_MODE;
+    }
+
     if (Copy_enuPin > OC0B || Copy_enuPin < OC0A)
+    {
         return INVALID_OUTPUT_PIN;
+    }
+
     if (!GET_BIT(TCCR0A, WGM00))
+    {
         return TIMER0_CURRENT_MODE_INCOMPATIBLE;
+    }
+
+    u8 Local_u8HardwareMode;
+
+    if (Copy_enuMode == PWM_NON_INVERTING)
+    {
+        Local_u8HardwareMode = 2;
+    }
+    else
+    {
+        Local_u8HardwareMode = 3;
+    }
 
     switch (Copy_enuPin)
     {
-    case OC0B:
-        TCCR0A &= ~(0x03 << 4);
-        TCCR0A |= (Copy_enuMode << 4);
-        break;
     case OC0A:
-        TCCR0A &= ~(0x03 << 6);
-        TCCR0A |= (Copy_enuMode << 6);
+
+        TCCR0A &= ~(0x03 << COM0A0);
+        TCCR0A |= (Local_u8HardwareMode << COM0A0);
+
+        break;
+
+    case OC0B:
+
+        TCCR0A &= ~(0x03 << COM0B0);
+        TCCR0A |= (Local_u8HardwareMode << COM0B0);
+
         break;
     }
+
     return TIMER0_OK;
 }
 
@@ -259,38 +285,86 @@ TIMER0_ErrorStatus TIMER0_enuGetCompareB(u8 *Copy_pu8Value)
     return TIMER0_OK;
 }
 
-TIMER0_ErrorStatus TIMER0_enuSetDutyCycle(TIMER0_OutputPin Copy_enuPin,
-                                          u8 Copy_u8Value)
+TIMER0_ErrorStatus TIMER0_enuSetDutyCycle(
+    TIMER0_OutputPin Copy_enuPin,
+    u8 Copy_u8Value)
 {
 
     if (Copy_u8Value > 100)
         return OUT_OF_RANGE;
-    if (Copy_enuPin > OC0B || Copy_enuPin < OC0A)
+
+    if (Copy_enuPin > OC0B)
         return INVALID_OUTPUT_PIN;
+
     if (!GET_BIT(TCCR0A, WGM00))
         return TIMER0_CURRENT_MODE_INCOMPATIBLE;
 
-    u8 top = 0;
+    u8 top;
+    u8 compareValue;
+    u8 com0x0;
+
     if (GET_BIT(TCCR0B, WGM02))
     {
-        //  Adjustable frequency mode
-        TIMER0_enuGetCompareA(&top);
-
-        if (Copy_u8Value > top)
-            return OUT_OF_RANGE;
+        /* Variable TOP modes */
         if (Copy_enuPin == OC0A)
             return TIMER0_CURRENT_MODE_INCOMPATIBLE;
 
-        OCR0B = GET_BIT(TCCR0A, COM0B0) ? ((u16)(100 - Copy_u8Value) * top) / 100 : ((u16)Copy_u8Value * top) / 100;
+        top = OCR0A;
+
+        com0x0 = GET_BIT(TCCR0A, COM0B0);
+
+        if (com0x0)
+        {
+            compareValue =
+                top - (((u16)Copy_u8Value * top) / 100);
+        }
+        else
+        {
+            compareValue =
+                ((u16)Copy_u8Value * top) / 100;
+        }
+
+        OCR0B = compareValue;
     }
     else
     {
-        // fixed frequency mode
-        top = MAX_VALUE;
+        /* Fixed TOP = 255 */
+        top = 255;
+
         if (Copy_enuPin == OC0A)
-            OCR0A = GET_BIT(TCCR0A, COM0A0) ? ((u16)(100 - Copy_u8Value) * top) / 100 : ((u16)Copy_u8Value * top) / 100;
+        {
+            com0x0 = GET_BIT(TCCR0A, COM0A0);
+
+            if (com0x0)
+            {
+                compareValue =
+                    top - (((u16)Copy_u8Value * top) / 100);
+            }
+            else
+            {
+                compareValue =
+                    ((u16)Copy_u8Value * top) / 100;
+            }
+
+            OCR0A = compareValue;
+        }
         else
-            OCR0B = GET_BIT(TCCR0A, COM0B0) ? ((u16)(100 - Copy_u8Value) * top) / 100 : ((u16)Copy_u8Value * top) / 100;
+        {
+            com0x0 = GET_BIT(TCCR0A, COM0B0);
+
+            if (com0x0)
+            {
+                compareValue =
+                    top - (((u16)Copy_u8Value * top) / 100);
+            }
+            else
+            {
+                compareValue =
+                    ((u16)Copy_u8Value * top) / 100;
+            }
+
+            OCR0B = compareValue;
+        }
     }
 
     return TIMER0_OK;
