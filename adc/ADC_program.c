@@ -92,13 +92,12 @@ ADC_ErrorStatus ADC_enuReadAsync(ADC_channel channel, u16 *result, void (*notifi
         return INVALID_CHANNEL;
     if (result == NULL)
         return NULL_POINTER;
+    if (!GET_BIT(SREG, 7))
+        return GLOBAL_INTERRUPT_DISABLED;
     if (ADC_CurrentState == ADC_BUSY_STATE)
         return ADC_BUSY;
 
     ADC_CurrentState = ADC_BUSY_STATE;
-
-    if (!GET_BIT(SREG, 7))
-        return GLOBAL_INTERRUPT_DISABLED;
 
     // setting the global values to be used by ADC ISR
     Global_u16AsyncResult = result;
