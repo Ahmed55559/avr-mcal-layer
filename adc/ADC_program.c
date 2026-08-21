@@ -46,6 +46,9 @@ void ADC_voidDisable(void)
 
 ADC_ErrorStatus ADC_enuReadSync(ADC_channel channel, u16 *result)
 {
+    if (!GET_BIT(ADCSRA, ADEN))
+        return ADC_DISABLED;
+
     if (channel > INTERNAL_TEMPRATURE_SENSOR || channel < ADC0)
         return INVALID_CHANNEL;
     if (result == NULL)
@@ -83,6 +86,8 @@ static u16 *Global_u16AsyncResult = NULL;
 static void (*Global_AsyncNotificationFunc)(void) = NULL;
 ADC_ErrorStatus ADC_enuReadAsync(ADC_channel channel, u16 *result, void (*notification_func)(void))
 {
+    if (!GET_BIT(ADCSRA, ADEN))
+        return ADC_DISABLED;
     if (channel > INTERNAL_TEMPRATURE_SENSOR || channel < ADC0)
         return INVALID_CHANNEL;
     if (result == NULL)

@@ -24,6 +24,7 @@ typedef enum
 typedef enum
 {
     ADC_OK,
+    ADC_DISABLED,
     INVALID_CHANNEL,
     INVALID_REF,
     INVALID_TRIGGER,
