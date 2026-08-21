@@ -188,24 +188,24 @@ TIMER0_ErrorStatus TIMER0_enuSetCallback(TIMER0_Interrupt Copy_enuInterrupt,
 
     return TIMER0_OK;
 }
-void __vector_17(void) __attribute__((signal));
-void __vector_17(void)
+void __vector_16(void) __attribute__((signal));
+void __vector_16(void)
 {
     if (TIMER0_Callback[0] != NULL)
     {
         TIMER0_Callback[0]();
     }
 }
-void __vector_15(void) __attribute__((signal));
-void __vector_15(void)
+void __vector_14(void) __attribute__((signal));
+void __vector_14(void)
 {
     if (TIMER0_Callback[1] != NULL)
     {
         TIMER0_Callback[1]();
     }
 }
-void __vector_16(void) __attribute__((signal));
-void __vector_16(void)
+void __vector_15(void) __attribute__((signal));
+void __vector_15(void)
 {
     if (TIMER0_Callback[2] != NULL)
     {
