@@ -154,6 +154,7 @@ ADC_ErrorStatus ADC_enuChangeTrigger(ADC_ConversionTrigger newTrigger)
         return AUTO_TRIGGER_DISABLED;
 
     // disabling ADEN so trigger changing not trigger a conversion
+    u8 adcWasEnabled = GET_BIT(ADCSRA, ADEN);
     CLR_BIT(ADCSRA, ADEN);
 
     // change trigger
@@ -162,8 +163,8 @@ ADC_ErrorStatus ADC_enuChangeTrigger(ADC_ConversionTrigger newTrigger)
     CLR_BIT(ADCSRB, ADTS2);
     ADCSRB |= newTrigger;
 
-    // enable ADEN
-    SET_BIT(ADCSRA, ADEN);
+    if (adcWasEnabled)
+        SET_BIT(ADCSRA, ADEN);
 
     return ADC_OK;
 }
