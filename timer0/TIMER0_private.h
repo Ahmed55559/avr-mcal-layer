@@ -9,7 +9,6 @@
 #define TIMER0_PRIVATE_H
 
 #define SREG *((volatile u8 *)0x5F) // we will use the 7th bit to read global interrupt status (Enabled/Disabled)
-#define PRR *((volatile u8 *)0x64)  // Power Reduction Register, to shut down/ turn on the Timer
 
 /* Timer Control Registers */
 #define TCCR0A *((volatile u8 *)0x44) // specify Waveform Generation (2 bits out of 3 bits) , Control OC0A,OC0B pins output mode

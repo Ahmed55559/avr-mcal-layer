@@ -57,8 +57,7 @@ void TIMER0_voidInit(void)
 
 TIMER0_ErrorStatus TIMER0_enuSetClkSource(TIMER0_ClkSource Copy_enuSource)
 {
-    if (!GET_BIT(PRR, PRTIM0))
-        return TIMER0_SHUTDOWN;
+
     if (Copy_enuSource > EXT_CLK_RISING || Copy_enuSource < NO_CLK)
         return INVALID_PRESCALER;
 
@@ -68,8 +67,7 @@ TIMER0_ErrorStatus TIMER0_enuSetClkSource(TIMER0_ClkSource Copy_enuSource)
 
 TIMER0_ErrorStatus TIMER0_enuSetTimerMode(TIMER0_Mode Copy_enuMode)
 {
-    if (!GET_BIT(PRR, PRTIM0))
-        return TIMER0_SHUTDOWN;
+
     if (Copy_enuMode > TIMER0_PWM_FAST_ADJ || Copy_enuMode < TIMER0_NORMAL)
         return INVALID_TIMER_MODE;
 
@@ -113,8 +111,7 @@ TIMER0_ErrorStatus TIMER0_enuSetTimerMode(TIMER0_Mode Copy_enuMode)
 TIMER0_ErrorStatus TIMER0_enuSetOCOutputMode(TIMER0_OCMode Copy_enuMode,
                                              TIMER0_OutputPin Copy_enuPin)
 {
-    if (!GET_BIT(PRR, PRTIM0))
-        return TIMER0_SHUTDOWN;
+
     if (Copy_enuMode > OC_SET || Copy_enuMode < OC_DISCONNECTED)
         return INVALID_OUTPUT_MODE;
     if (Copy_enuPin > OC0B || Copy_enuPin < OC0A)
@@ -137,8 +134,7 @@ TIMER0_ErrorStatus TIMER0_enuSetOCOutputMode(TIMER0_OCMode Copy_enuMode,
 TIMER0_ErrorStatus TIMER0_enuSetPWMOutputMode(TIMER0_PWMMode Copy_enuMode,
                                               TIMER0_OutputPin Copy_enuPin)
 {
-    if (!GET_BIT(PRR, PRTIM0))
-        return TIMER0_SHUTDOWN;
+
     if (Copy_enuMode != PWM_INVERTING && Copy_enuMode != PWM_NON_INVERTING)
         return INVALID_OUTPUT_MODE;
     if (Copy_enuPin > OC0B || Copy_enuPin < OC0A)
@@ -162,8 +158,7 @@ TIMER0_ErrorStatus TIMER0_enuSetPWMOutputMode(TIMER0_PWMMode Copy_enuMode,
 
 TIMER0_ErrorStatus TIMER0_enuEnableInterrupt(TIMER0_Interrupt Copy_enuInterrupt)
 {
-    if (!GET_BIT(PRR, PRTIM0))
-        return TIMER0_SHUTDOWN;
+
     if (Copy_enuInterrupt > COMPARE_MATCHB || Copy_enuInterrupt < OVERFLOW)
         return INVALID_INTERRUPT;
 
@@ -173,8 +168,7 @@ TIMER0_ErrorStatus TIMER0_enuEnableInterrupt(TIMER0_Interrupt Copy_enuInterrupt)
 
 TIMER0_ErrorStatus TIMER0_enuDisableInterrupt(TIMER0_Interrupt Copy_enuInterrupt)
 {
-    if (!GET_BIT(PRR, PRTIM0))
-        return TIMER0_SHUTDOWN;
+
     if (Copy_enuInterrupt > COMPARE_MATCHB || Copy_enuInterrupt < OVERFLOW)
         return INVALID_INTERRUPT;
 
@@ -275,8 +269,7 @@ TIMER0_ErrorStatus TIMER0_enuGetCompareB(u8 *Copy_pu8Value)
 TIMER0_ErrorStatus TIMER0_enuSetDutyCycle(TIMER0_OutputPin Copy_enuPin,
                                           u8 Copy_u8Value)
 {
-    if (!GET_BIT(PRR, PRTIM0))
-        return TIMER0_SHUTDOWN;
+
     if (Copy_u8Value > MAX_VALUE)
         return OUT_OF_RANGE;
     if (Copy_enuPin > OC0B || Copy_enuPin < OC0A)

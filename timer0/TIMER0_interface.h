@@ -72,7 +72,6 @@ typedef enum
     OUT_OF_RANGE,
     NULL_POINTER,
     GIE_DISABLED,
-    TIMER0_SHUTDOWN,
 } TIMER0_ErrorStatus;
 
 /**
