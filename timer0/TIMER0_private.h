@@ -57,4 +57,10 @@
 #define OCF0A 1 // Timer compare match A interrupt flag
 #define OCF0B 2 // Timer compare match B interrupt flag
 
+/* helpers */
+static u8 TIMER0_u8GetCurrentMode(void);
+static u8 TIMER0_u8IsPWMMode(void);
+static u8 TIMER0_u8IsVariableTopMode(void);
+static u8 TIMER0_u8GetCOMMode(TIMER0_OutputPin Copy_enuPin);
+
 #endif /* TIMER0_PRIVATE_H */
