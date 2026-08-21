@@ -18,16 +18,20 @@ static WDT_Mode local_enuTimerMode;
 static void WDT_voidApplyConfiguration(void)
 {
     u8 Local_u8NewConfig = 0;
+
     switch (local_enuTimerMode)
     {
     case WDT_STOPPED:
         break;
+
     case WDT_INTERRUPT:
         Local_u8NewConfig |= (1 << WDIE);
         break;
+
     case WDT_SYS_RESET:
         Local_u8NewConfig |= (1 << WDE);
         break;
+
     case WDT_INTERRUPT_RESET:
         Local_u8NewConfig |= (1 << WDE);
         Local_u8NewConfig |= (1 << WDIE);
@@ -38,42 +42,61 @@ static void WDT_voidApplyConfiguration(void)
     {
     case WDT_16MS:
         break;
+
     case WDT_32MS:
         Local_u8NewConfig |= (1 << WDP0);
         break;
+
     case WDT_64MS:
         Local_u8NewConfig |= (1 << WDP1);
         break;
+
     case WDT_125MS:
-        Local_u8NewConfig |= (1 << WDP1) | (1 << WDP0);
+        Local_u8NewConfig |= (1 << WDP1) |
+                             (1 << WDP0);
         break;
+
     case WDT_250MS:
         Local_u8NewConfig |= (1 << WDP2);
         break;
+
     case WDT_500MS:
-        Local_u8NewConfig |= (1 << WDP2) | (1 << WDP0);
-
+        Local_u8NewConfig |= (1 << WDP2) |
+                             (1 << WDP0);
         break;
+
     case WDT_1S:
-        Local_u8NewConfig |= (1 << WDP2) | (1 << WDP1);
+        Local_u8NewConfig |= (1 << WDP2) |
+                             (1 << WDP1);
         break;
-    case WDT_2S:
-        Local_u8NewConfig |= (1 << WDP2) | (1 << WDP1) | (1 << WDP0);
 
+    case WDT_2S:
+        Local_u8NewConfig |= (1 << WDP2) |
+                             (1 << WDP1) |
+                             (1 << WDP0);
         break;
+
     case WDT_4S:
         Local_u8NewConfig |= (1 << WDP3);
         break;
+
     case WDT_8S:
-        Local_u8NewConfig |= (1 << WDP3) | (1 << WDP0);
+        Local_u8NewConfig |= (1 << WDP3) |
+                             (1 << WDP0);
         break;
     }
-    // to change time out configration
-    // set WDCE , WDE at same operation
-    // in next 4 cycles clear WDCE, set WDE and prescaler as desired all in one Operation
+
     u8 Local_u8SREG = SREG;
+
+    /* Disable global interrupts */
+    CLR_BIT(SREG, GIE);
+
+    /* Timed sequence */
     WDTCSR = (1 << WDCE) | (1 << WDE);
+
     WDTCSR = Local_u8NewConfig;
+
+    /* Restore previous interrupt state */
     SREG = Local_u8SREG;
 }
 
