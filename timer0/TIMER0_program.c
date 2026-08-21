@@ -120,8 +120,8 @@ TIMER0_ErrorStatus TIMER0_enuSetOCOutputMode(TIMER0_OCMode Copy_enuMode,
     switch (Copy_enuPin)
     {
     case OC0B:
-        TCCR0B &= ~(0x03 << 4);
-        TCCR0B |= (Copy_enuMode << 4);
+        TCCR0A &= ~(0x03 << 4);
+        TCCR0A |= (Copy_enuMode << 4);
         break;
     case OC0A:
         TCCR0A &= ~(0x03 << 6);
@@ -145,8 +145,8 @@ TIMER0_ErrorStatus TIMER0_enuSetPWMOutputMode(TIMER0_PWMMode Copy_enuMode,
     switch (Copy_enuPin)
     {
     case OC0B:
-        TCCR0B &= ~(0x03 << 4);
-        TCCR0B |= (Copy_enuMode << 4);
+        TCCR0A &= ~(0x03 << 4);
+        TCCR0A |= (Copy_enuMode << 4);
         break;
     case OC0A:
         TCCR0A &= ~(0x03 << 6);
@@ -215,17 +215,12 @@ void __vector_16(void)
 
 TIMER0_ErrorStatus TIMER0_enuSetCounter(u8 Copy_u8Value)
 {
-    if (Copy_u8Value > MAX_VALUE)
-        return OUT_OF_RANGE;
-
     TCNT0 = Copy_u8Value;
     return TIMER0_OK;
 }
 
 TIMER0_ErrorStatus TIMER0_enuSetCompareA(u8 Copy_u8Value)
 {
-    if (Copy_u8Value > MAX_VALUE)
-        return OUT_OF_RANGE;
 
     OCR0A = Copy_u8Value;
     return TIMER0_OK;
@@ -233,8 +228,6 @@ TIMER0_ErrorStatus TIMER0_enuSetCompareA(u8 Copy_u8Value)
 
 TIMER0_ErrorStatus TIMER0_enuSetCompareB(u8 Copy_u8Value)
 {
-    if (Copy_u8Value > MAX_VALUE)
-        return OUT_OF_RANGE;
 
     OCR0B = Copy_u8Value;
     return TIMER0_OK;
@@ -270,7 +263,7 @@ TIMER0_ErrorStatus TIMER0_enuSetDutyCycle(TIMER0_OutputPin Copy_enuPin,
                                           u8 Copy_u8Value)
 {
 
-    if (Copy_u8Value > MAX_VALUE)
+    if (Copy_u8Value > 100)
         return OUT_OF_RANGE;
     if (Copy_enuPin > OC0B || Copy_enuPin < OC0A)
         return INVALID_OUTPUT_PIN;
@@ -288,16 +281,16 @@ TIMER0_ErrorStatus TIMER0_enuSetDutyCycle(TIMER0_OutputPin Copy_enuPin,
         if (Copy_enuPin == OC0A)
             return TIMER0_CURRENT_MODE_INCOMPATIBLE;
 
-        OCR0B = GET_BIT(TCCR0A, COM0B0) ? (1 - (Copy_u8Value / 100)) * top : (Copy_u8Value / 100) * top;
+        OCR0B = GET_BIT(TCCR0A, COM0B0) ? ((u16)(100 - Copy_u8Value) * top) / 100 : ((u16)Copy_u8Value * top) / 100;
     }
     else
     {
         // fixed frequency mode
         top = MAX_VALUE;
         if (Copy_enuPin == OC0A)
-            OCR0A = GET_BIT(TCCR0A, COM0A0) ? (1 - (Copy_u8Value / 100)) * top : (Copy_u8Value / 100) * top;
+            OCR0A = GET_BIT(TCCR0A, COM0A0) ? ((u16)(100 - Copy_u8Value) * top) / 100 : ((u16)Copy_u8Value * top) / 100;
         else
-            OCR0B = GET_BIT(TCCR0A, COM0B0) ? (1 - (Copy_u8Value / 100)) * top : (Copy_u8Value / 100) * top;
+            OCR0B = GET_BIT(TCCR0A, COM0B0) ? ((u16)(100 - Copy_u8Value) * top) / 100 : ((u16)Copy_u8Value * top) / 100;
     }
 
     return TIMER0_OK;
